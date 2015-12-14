@@ -2,15 +2,9 @@
     "name": "dolphin-server-web-package",
     "version": "0.0.1",
     "preferGlobal": true,
-    "description": "Web server for dolphin",
+    "description": "Web server package",
     "dependencies": {
         "express": "~4.13.3",
         "morgan": "~1.6.1"
-    },
-    "devDependencies": {
-        "grunt": "~0.4.5",
-        "grunt-contrib-jshint": "~0.11.3",
-        "load-grunt-tasks": "~3.3.0",
-        "time-grunt": "~1.2.2"
     }
 }

@@ -8,6 +8,7 @@ var Dolphin = require('dolphin-core');
 var Module = require('dolphin-core-modules').Module;
 var FSUtil = require('dolphin-core-utils').FS;
 var Logger = require('dolphin-logger');
+var express = require('express');
 
 var SERVER_FOLDER = 'server';
 var ROUTES_FOLDER = 'routes';
@@ -38,41 +39,57 @@ ws.resolveRoutes = function (module) {
 };
 
 ws.run(function (WebServerConfigurationFactory) {
-    var funcs = [];
-    var modules = WebServerConfigurationFactory.getModules();
+    //event start
+    WebServerConfigurationFactory.events.start.resolve();
 
-    //load default
-    WebServerConfigurationFactory.middleware.before.forEach(function (middleware) {
-        WebServerConfigurationFactory.getApp().use(middleware);
+    //init sources
+    var staticSources = WebServerConfigurationFactory.getStaticSources();
+    staticSources.forEach(function (source) {
+        WebServerConfigurationFactory.getApp().use(source.url, express.static(source.path));
     });
 
-    for (var i in modules) {
-        funcs.push(ws.resolveMiddleware(modules[i], 'before'));
-    }
-    //load before all middleware
-    Q.all(funcs).then(function () {
-        funcs = [];
-        for (i in modules) {
-            funcs.push(ws.resolveRoutes(modules[i]));
-        }
+    //wait for other modules
+    var promises = WebServerConfigurationFactory.getPromises();
+    Q.all(promises).then(function () {
+        var funcs = [];
+        var modules = WebServerConfigurationFactory.getModules();
 
-        //load all routes
+        //load default
+        WebServerConfigurationFactory.getMiddleware().before.forEach(function (middleware) {
+            WebServerConfigurationFactory.getApp().use(middleware);
+        });
+
+        for (var i in modules) {
+            funcs.push(ws.resolveMiddleware(modules[i], 'before'));
+        }
+        //load before all middleware
         Q.all(funcs).then(function () {
             funcs = [];
             for (i in modules) {
-                funcs.push(ws.resolveMiddleware(modules[i], 'after'));
+                funcs.push(ws.resolveRoutes(modules[i]));
             }
 
-            //load after all middleware
+            //load all routes
             Q.all(funcs).then(function () {
+                funcs = [];
+                for (i in modules) {
+                    funcs.push(ws.resolveMiddleware(modules[i], 'after'));
+                }
 
-                //load default
-                WebServerConfigurationFactory.middleware.after.forEach(function (middleware) {
-                    WebServerConfigurationFactory.getApp().use(middleware);
-                });
+                //load after all middleware
+                Q.all(funcs).then(function () {
 
-                WebServerConfigurationFactory.getHttp().listen(WebServerConfigurationFactory.port, WebServerConfigurationFactory.host, function () {
-                    Logger.info('Web server started on ip and port:', WebServerConfigurationFactory.host, ':', WebServerConfigurationFactory.port);
+                    //load default
+                    WebServerConfigurationFactory.getMiddleware().after.forEach(function (middleware) {
+                        WebServerConfigurationFactory.getApp().use(middleware);
+                    });
+
+                    WebServerConfigurationFactory.getHttp().listen(WebServerConfigurationFactory.port, WebServerConfigurationFactory.host, function () {
+                        Logger.info('Web server started on:', WebServerConfigurationFactory.host + ':' + WebServerConfigurationFactory.port);
+
+                        //event end, notify all modules
+                        WebServerConfigurationFactory.events.end.resolve();
+                    });
                 });
             });
         });
