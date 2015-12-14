@@ -1,8 +1,12 @@
 {
     "name": "dolphin-server-web-package",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "preferGlobal": true,
     "description": "Web server package",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/knodeit/dolphin-server-web-package"
+    },
     "dependencies": {
         "express": "~4.13.3",
         "morgan": "~1.6.1"
