@@ -1,7 +1,7 @@
 {
     "name": "dolphin-server-web-package",
-    "version": "0.0.4",
-    "preferGlobal": true,
+    "version": "0.0.5",
+    "preferGlobal": false,
     "description": "Web server package",
     "repository": {
         "type": "git",
