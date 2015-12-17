@@ -88,7 +88,9 @@ ws.run(function (WebServerConfigurationFactory) {
                         Logger.info('Web server started on:', WebServerConfigurationFactory.host + ':' + WebServerConfigurationFactory.port);
 
                         //event end, notify all modules
-                        WebServerConfigurationFactory.events.end.resolve();
+                        setTimeout(function () {
+                            WebServerConfigurationFactory.events.end.resolve();
+                        }, 0);
                     });
                 });
             });
