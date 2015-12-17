@@ -1,5 +1,5 @@
 ### Installation
-```npm install dolphin-server-web-package```
+```npm install dolphin-server-web-package --save```
 
 
 ### WebServerConfigurationFactory
