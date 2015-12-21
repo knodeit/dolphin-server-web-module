@@ -40,7 +40,7 @@ ws.resolveRoutes = function (module) {
 
 ws.run(function (WebServerConfigurationFactory) {
     //event start
-    WebServerConfigurationFactory.events.start.resolve();
+    WebServerConfigurationFactory.events._startEvent.resolve();
 
     //init sources
     var staticSources = WebServerConfigurationFactory.getStaticSources();
@@ -89,7 +89,7 @@ ws.run(function (WebServerConfigurationFactory) {
 
                         //event end, notify all modules
                         setTimeout(function () {
-                            WebServerConfigurationFactory.events.end.resolve();
+                            WebServerConfigurationFactory._endEvent.end.resolve();
                         }, 0);
                     });
                 });

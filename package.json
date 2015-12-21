@@ -1,6 +1,6 @@
 {
     "name": "dolphin-server-web-package",
-    "version": "0.0.5",
+    "version": "0.1.0",
     "preferGlobal": false,
     "description": "Web server package",
     "repository": {

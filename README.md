@@ -19,6 +19,22 @@ methods:
 * addStaticSource - requires object with keys: url and path
 
 
+### Events
+
+```javascript
+
+myModule.configureFactories(function (WebServerConfigurationFactory) {
+    WebServerConfigurationFactory.events.start.then(function(){
+        //before start
+    });
+    
+    WebServerConfigurationFactory.events.end.then(function(){
+        //after start
+    });
+});
+
+```
+
 When you call "addModule" the web server will read all routes and middleware in the following folders:
 ```
 package_folder

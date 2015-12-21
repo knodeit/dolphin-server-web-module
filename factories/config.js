@@ -23,8 +23,10 @@ module.exports = {
     name: 'Configuration',
     entity: {
         events: {
-            start: startEvent,
-            end: endEvent
+            _startEvent: startEvent,
+            _endEvent: endEvent,
+            start: startEvent.promise,
+            end: endEvent.promise
         },
         host: process.env.HOST || process.env.HOSTNAME || 'localhost',
         port: process.env.PORT || 3000,
