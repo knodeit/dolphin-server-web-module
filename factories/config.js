@@ -48,11 +48,11 @@ module.exports = {
         getPromises: function () {
             return promises;
         },
-        addMiddlewareBefore: function (middleware) {
-            middleware.before.push(middleware);
+        addMiddlewareBefore: function (m) {
+            middleware.before.push(m);
         },
-        addMiddlewareAfter: function (middleware) {
-            middleware.after.push(middleware);
+        addMiddlewareAfter: function (m) {
+            middleware.after.push(m);
         },
         getMiddleware: function () {
             return middleware;
