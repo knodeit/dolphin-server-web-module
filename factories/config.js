@@ -6,6 +6,7 @@ var Q = require('q');
 var express = require('express');
 var http = require('http');
 var morgan = require('morgan');
+var _ = require('lodash');
 
 var modules = [];
 var middleware = {
@@ -40,7 +41,7 @@ module.exports = {
             modules.push(module);
         },
         getModules: function () {
-            return modules;
+            return _.uniq(modules);
         },
         addPromise: function (promise) {
             promises.push(promise);
@@ -61,7 +62,7 @@ module.exports = {
             staticSources.push(source);
         },
         getStaticSources: function () {
-            return staticSources;
+            return _.uniq(staticSources);
         }
     }
 };
