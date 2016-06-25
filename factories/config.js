@@ -10,9 +10,20 @@ var _ = require('lodash');
 
 var modules = [];
 var middleware = {
-    before: [morgan('combined')],
+    before: [],
     after: []
 };
+
+if (process.env.NODE_ENV !== 'production') {
+    if (process.env.WEB_LOGGER !== undefined) {
+        middleware.before.push(morgan(process.env.WEB_LOGGER));
+    } else {
+        middleware.before.push(morgan('dev'));
+    }
+} else {
+    middleware.before.push(morgan('combined'));
+}
+
 var staticSources = [];
 var promises = [];
 var app = express();
