@@ -89,7 +89,7 @@ ws.run(function (WebServerConfigurationFactory) {
 
                         //event end, notify all modules
                         setTimeout(function () {
-                            WebServerConfigurationFactory._endEvent.end.resolve();
+                            WebServerConfigurationFactory._endEvent.resolve();
                         }, 0);
                     });
                 });
