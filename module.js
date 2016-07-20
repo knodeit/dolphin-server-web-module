@@ -2,6 +2,7 @@
  * Created by Vadim on 12/3/15.
  */
 'use strict';
+var isCronMode = require('dolphin-core').isCronMode();
 var Q = require('q');
 var PathUtil = require('path');
 var Dolphin = require('dolphin-core');
@@ -41,6 +42,15 @@ ws.resolveRoutes = function (module) {
 ws.run(function (WebServerConfigurationFactory) {
     //event start
     WebServerConfigurationFactory.events._startEvent.resolve();
+
+    //don't run is cron mode
+    if (isCronMode) {
+        //event end, notify all modules
+        setTimeout(function () {
+            WebServerConfigurationFactory.events._endEvent.resolve();
+        }, 0);
+        return;
+    }
 
     //init sources
     var staticSources = WebServerConfigurationFactory.getStaticSources();
