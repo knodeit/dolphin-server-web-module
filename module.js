@@ -39,7 +39,7 @@ ws.resolveRoutes = function (module) {
     return _resolveFiles(module.resolvePath(PathUtil.join(SERVER_FOLDER, ROUTES_FOLDER, '/**/*.js')));
 };
 
-ws.run(function (WebServerConfigurationFactory) {
+ws.run(function (WebServerConfigurationFactory, GracefulShutdownConfigurationFactory) {
     //event start
     WebServerConfigurationFactory.events._startEvent.resolve();
 
@@ -101,6 +101,16 @@ ws.run(function (WebServerConfigurationFactory) {
                         setTimeout(function () {
                             WebServerConfigurationFactory.events._endEvent.resolve();
                         }, 0);
+
+                        function stop() {
+                            var deferred = Q.defer();
+                            WebServerConfigurationFactory.getHttp().close(function () {
+                                deferred.resolve();
+                            });
+                            return deferred.promise;
+                        }
+
+                        GracefulShutdownConfigurationFactory.addCallback(stop);
                     });
                 });
             });
